@@ -1,7 +1,7 @@
 ![Alt Text](https://raw.githubusercontent.com/52Doraemon/52Doraemon/f0458dc351d9d5c82b81cccd493dc5cf68e52996/images/welcome.svg)
 ## Hi there! 👋
 
-I'm an incredibly passionate software engineer with a deep love for computer programming. My expertise lies in backend development using Java and frameworks like Spring Boot. Additionally, I am proficient in modern web frameworks such as Vue.js for frontend development.
+I'm a highly passionate software engineer with a strong enthusiasm for computer programming. My expertise lies in backend development using Java and frameworks like Spring Boot. Additionally, I am proficient in modern web frameworks such as Vue.js for frontend development.
 
 ### About Me
 
