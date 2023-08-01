@@ -11,6 +11,14 @@ I'm an incredibly passionate software engineer with a deep love for computer pro
 - 📚 Constantly exploring new technologies and keeping up with the latest industry trends.
 - 🚀 Committed to delivering high-quality, scalable, and efficient solutions.
 
+### Projects
+
+I currently have seven projects in my repository, including both public and private ones. While some of the public projects may still be a work in progress, I'm a perfectionist when it comes to code and strive for optimal results. I aim to spend more time optimizing them in the near future.
+
+One of the projects I am currently working on is a starter framework based on Spring Boot. It provides essential functionalities and allows us to quickly set up a backend for other projects without starting from scratch. Here's a workflow diagram of this project:
+
+![Project Quick Start Workflow Diagram](https://raw.githubusercontent.com/52Doraemon/52Doraemon/806b9b59046d35c1b3f5a417494bb2cc736a0769/images/project-quick-start-workflow-diagram.svg)
+
 ### Interests and Hobbies
 
 When I'm not coding, you can find me:
@@ -22,4 +30,3 @@ When I'm not coding, you can find me:
 I'm excited about the opportunity to collaborate, learn from others, and contribute to the world of software development. Feel free to reach out to me if you'd like to connect
 
 Let's code and create wonders together! ✨
-![Alt Text](https://raw.githubusercontent.com/52Doraemon/52Doraemon/806b9b59046d35c1b3f5a417494bb2cc736a0769/images/project-quick-start-workflow-diagram.svg)
