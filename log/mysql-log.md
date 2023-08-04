@@ -1,4 +1,66 @@
-#### 1、mysql中，"mysql"和"mysqld"命令区别
+#### 0、Win10安装MySQL
+* 以 管理员身份运行 终端
+* mysqld是mysql的守护进程。每次在使用mysql前必须先用它
+
+#### 1、mysql数据库默认对表名大小写敏感
+
+~~~
+问题来源
+
+我的操作：
+1、使用idea导入xxx项目
+2、创建mysql库
+create database `xxx` default character set utf8mb4 collate utf8mb4_general_ci;
+3、执行sql脚本
+xxx/db/xxx.sql
+4、配置好Mysql数据库和Redis
+5、启动XxxApplication
+控制台提示：Table ‘xxx.USER’ doesn’t exist
+
+~~~
+
+> 需要配置不区大小写
+
+查询目前是否区分大小写
+
+* 1、连接Mysql并进入mysql命令行
+* 2、执行
+~~~sql
+show global variables like ‘%lower_case%’;
+~~~
+查看当前mysql的大小写敏感配置
+
+
+| Variable_name          | Value |
+| ---------------------- | ----- |
+| lower_case_file_system |  OFF  |
+| lower_case_table_names |   0   |
+
+* 3、lower_case_file_system
+表示当前系统文件是否大小写敏感，只读参数，无法修改。
+ON：表示当前系统对大小写不敏感
+OFF：表示当前系统对大小写敏感
+
+* 4、lower_case_table_names
+表示创建的数据表名，是否区分大小写
+lower_case_table_names = 1 ：表示不区分大小写
+lower_case_table_names = 0 ：表示区分大小写
+
+* 5、进入配置文件
+~~~sql
+/etc/my.cnf
+~~~
+
+* 6、修改配置（将数据库表名对大小写敏感）
+~~~shell
+[mysqld]
+
+lower_case_table_names=1
+~~~
+
+* 7、将数据库重启
+
+#### 2、mysql中，"mysql"和"mysqld"命令区别
 
 在MySQL中，"mysql"和"mysqld"是两个不同的命令，具有不同的用途。
 1、mysql命令：
@@ -18,7 +80,7 @@ mysqld
 
 请注意，命令的具体用法和语法可能因MySQL版本和操作系统而有所差异。在使用这些命令时，请参考MySQL文档和相关文档以获得准确的用法和参数信息。
 
-#### 2、"mysql"和"mysqld"命令的用法
+#### 3、"mysql"和"mysqld"命令的用法
 "mysql"和"mysqld"都是MySQL数据库管理系统中的命令。
 
 mysql命令：mysql是用于连接、操作和管理MySQL数据库的命令行客户端工具。可以使用mysql命令执行SQL语句，管理数据库用户和权限，导入和导出数据等。以下是一些常见的用法：
