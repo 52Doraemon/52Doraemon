@@ -23,5 +23,5 @@ Windows对于命令行长度有一个限制，具体取决于操作系统的版�
 <property name="dynamic.classpath" value="true" />
 
 如果还是不行，修改如下：
-
 ~~~
+![Alt idea-issue-log-Shorten_command_line](../assets/idea-issue-log-Shorten_command_line.webp)
