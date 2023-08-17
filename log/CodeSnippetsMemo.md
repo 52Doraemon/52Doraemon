@@ -147,3 +147,110 @@ public class YourService {
 }
 ~~~
 > MyBatis Plus 是对 MyBatis 的增强，提供了很多方便的注解和方法，其中包括了 @Mapper 注解用于标识 Mapper 接口。如果使用 MyBatis Plus，可以在 Mapper 接口上使用 @Mapper 注解，让 Spring Boot 自动生成 Mapper 的实现。
+
+#### 4、Springboot怎么知道识别Mybaits的XML配置文件
+> 在 Spring Boot 中，如果使用 MyBatis 进行数据库操作，需要配置 Spring Boot 让它能够识别并加载 MyBatis 的 XML 配置文件。
+
+1、引入依赖：首先，在 pom.xml 文件中添加 MyBatis 的依赖，以及数据库驱动的依赖。例如，如果使用 MySQL 数据库，可以添加以下依赖：
+
+~~~xml
+<dependency>
+    <groupId>org.mybatis.spring.boot</groupId>
+    <artifactId>mybatis-spring-boot-starter</artifactId>
+    <version>2.2.0</version>
+</dependency>
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+</dependency>
+~~~
+
+2、配置数据源：在 application.properties 或 application.yml 文件中配置数据源相关信息，例如数据库 URL、用户名、密码等。
+~~~properties
+spring.datasource.url=jdbc:mysql://localhost:3306/your_database
+spring.datasource.username=your_username
+spring.datasource.password=your_password
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+~~~
+
+3、配置 MyBatis XML 扫描路径：在 application.properties 或 application.yml 文件中配置 MyBatis 的 XML 配置文件扫描路径。
+~~~properties
+mybatis.mapper-locations=classpath:mapper/*.xml
+~~~
+> 这里的 classpath:mapper/*.xml 指定了 MyBatis XML 配置文件所在的路径，可以根据实际情况修改。
+
+1、创建 Mapper 接口：创建 Mapper 接口，不需要添加任何注解。Spring Boot 会自动扫描这些接口并创建相应的实现。
+
+2、创建 MyBatis XML 配置文件：创建 MyBatis XML 配置文件，放置在配置的扫描路径下（例如，src/main/resources/mapper 目录）。在这些配置文件中，编写 SQL 语句和映射关系。
+
+3、使用 Mapper 接口：在需要进行数据库操作的地方，注入相应的 Mapper 接口，调用方法进行数据库操作。
+
+#### 5、MybatisPlus 条件构造器
+
+> `User::getName`这种语法是 Java 8 引入的 Lambda 表达式的一种写法，它用于创建一个方法引用，表示调用 User 类的 getName 方法。在 MyBatis Plus 的条件构造器中，特别是 LambdaQueryWrapper 和 LambdaUpdateWrapper，可以使用这种语法来构建类型安全的查询条件或更新条件。
+
+* `QueryWrapper`：常规条件构造器，用于构建普通的查询条件。（常用）
+
+* `LambdaQueryWrapper`：使用 Lambda 表达式构建查询条件，使代码更加简洁和可读。（常用）
+
+* `UpdateWrapper`：构建更新条件。（常用）
+
+* LambdaUpdateWrapper：使用 Lambda 表达式构建更新条件。
+
+* AbstractWrapper：抽象的条件构造器，为其他类型的条件构造器提供了共享的方法和逻辑。
+
+* QueryChainWrapper：一种链式查询的封装，提供了链式调用的方式来构建查询条件。
+
+* LambdaQueryChainWrapper：基于 Lambda 表达式的链式查询封装。
+
+* UpdateChainWrapper：链式更新封装，提供了链式调用的方式来构建更新条件。
+
+* LambdaUpdateChainWrapper：基于 Lambda 表达式的链式更新封装。
+
+~~~java
+@Service
+public class UserService {
+
+    // 示例实体类
+    // User 类包含 id、name、age、email 字段
+
+    // 使用 QueryWrapper 进行查询
+    public List<User> getUsersByAge(int age) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("age", age);
+        return userMapper.selectList(queryWrapper);
+    }
+
+    // 使用 LambdaQueryWrapper 进行查询
+    public List<User> getUsersByName(String name) {
+        LambdaQueryChainWrapper<User> lambdaQueryWrapper = new LambdaQueryChainWrapper<>(userMapper);
+        return lambdaQueryWrapper.like(User::getName, name).list();
+    }
+
+    // 使用 UpdateWrapper 进行更新
+    public int updateUserAge(String name, int newAge) {
+        UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("name", name).set("age", newAge);
+        return userMapper.update(null, updateWrapper);
+    }
+
+    // 使用 LambdaUpdateWrapper 进行更新
+    public int updateUserEmail(String name, String newEmail) {
+        LambdaUpdateWrapper<User> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper.eq(User::getName, name).set(User::getEmail, newEmail);
+        return userMapper.update(null, lambdaUpdateWrapper);
+    }
+
+    // 使用 UpdateChainWrapper 进行链式更新
+    public int updateUserAgeWithChain(String name, int newAge) {
+        UpdateChainWrapper<User> updateChainWrapper = new UpdateChainWrapper<>(userMapper);
+        return updateChainWrapper.eq("name", name).set("age", newAge).update();
+    }
+
+    // 使用 LambdaUpdateChainWrapper 进行链式更新
+    public int updateUserEmailWithChain(String name, String newEmail) {
+        LambdaUpdateChainWrapper<User> lambdaUpdateChainWrapper = new LambdaUpdateChainWrapper<>(userMapper);
+        return lambdaUpdateChainWrapper.eq(User::getName, name).set(User::getEmail, newEmail).update();
+    }
+}
+~~~
