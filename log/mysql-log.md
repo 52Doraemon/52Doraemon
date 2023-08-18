@@ -96,3 +96,23 @@ mysqld命令：mysqld是MySQL数据库管理系统的守护进程，也称为MyS
 * 重启MySQL服务器：sudo service mysql restart
 * 查看MySQL服务器状态：sudo service mysql status
 需要注意的是，以上命令的具体用法会根据不同的操作系统和MySQL版本有所差异。在使用这些命令时，建议参考相关文档或使用命令的帮助选项来获取更详细的使用说明。
+
+#### 4、Mysql连接错误 `1129 Host is blocked because of many connection errors; unblock with 'mysqladmin flush-host'`
+
+> 原因：同一个ip在短时间内产生太多（超过mysql数据库max_connection_errors的最大值）中断的数据库连接而导致的阻塞
+
+使用 `mysqladmin flush-hosts` 命令清理一下 `hosts` 文件：
+在查找到的目录下使用命令修改：
+
+~~~shell
+/usr/bin/mysqladmin flush-hosts -h192.168.1.1 -P3308 -uroot -prootpwd;
+~~~
+
+* 备注：其中端口号，用户名，密码都可以根据需要来添加和修改；配置有master/slave主从数据库的要把主库和从库都修改一遍的。
+
+**最简单的方法：可以在数据库中进行，命令如下：flush hosts;**
+~~~shell
+# 执行： `mysqladmin flush-hosts -h 127.0.0.1 -u[用户名] -p` 命令，然后输入密码。
+
+# 或者 在 linux 端， `mysql mysql -uroot -p` 输入root密码，进入mysql，执行 `flush hosts;` 重新连接即可
+~~~
