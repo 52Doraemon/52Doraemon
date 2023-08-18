@@ -17,7 +17,21 @@ I currently have seven projects in my repository, including both public and priv
 
 One of the projects I am currently working on is a starter framework based on Spring Boot. It provides essential functionalities and allows us to quickly set up a backend for other projects without starting from scratch. Here's a workflow diagram of this project:
 
+#### 1、Project Quick Start Workflow Diagram
+
 ![Project Quick Start Workflow Diagram](./images/project-quick-start-workflow-diagram.png)
+
+#### 2、qrcode-login
+
+![qrcode-login](./images/qrcode-login.png)
+
+#### 3、websocket_chat
+
+![websocket_chat](./images/websocket_chat.png)
+
+#### 4、class-loader4j
+
+![class-loader4j.png](./images/class-loader4j.png)
 
 ### Interests and Hobbies
 
