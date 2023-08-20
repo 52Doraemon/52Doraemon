@@ -25,3 +25,10 @@ Windows对于命令行长度有一个限制，具体取决于操作系统的版�
 如果还是不行，修改如下：
 ~~~
 ![Alt idea-issue-log-Shorten_command_line](../assets/idea-issue-log-Shorten_command_line.webp)
+
+#### 2、在Idea中使用本地git拉取(pull)或抓取(fetch)远程github仓库出现： `Failed to connect to github.com port 443: Timed out`
+
+* 使用http/https拉取，使用这个传输不稳定，很受网络影响，多试几次pull或者push，重新在本地git bash，有时候就可以成功，但是大多数情况都是失败最后还是报错，以及各种失败。
+
+> 最终的解决方案就是放弃使用http/https拉取代码，使用ssh拉取，网上有很多ssh拉取代码的教程，会比网络直接拉取好很多，速度快并且稳定。
+
