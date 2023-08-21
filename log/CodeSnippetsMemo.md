@@ -302,3 +302,31 @@ public class UserService {
 3、反向代理：在服务器端配置一个代理服务器，通过代理服务器转发请求，从而绕过了浏览器的同源策略。
 
 4、WebSocket：使用WebSocket协议进行通信，它不受同源策略限制，可以在不同域名和端口间实现双向通信。
+
+#### 7、对在数据库中查询结果进行分页，可以使用Mybatis Plus提供的分页插件来实现
+
+~~~java
+@Mapper
+public interface TablePropertyMapper {
+
+    @Select("SELECT * FROM information_schema.columns WHERE table_name = #{tableName}")
+    IPage<TablePropertyVO> getTableProperties(Page<TablePropertyVO> page, @Param("tableName") String tableName);
+
+}
+
+@Service
+public class TablePropertyService {
+
+    private final TablePropertyMapper tablePropertyMapper;
+
+    @Autowired
+    public TablePropertyService(TablePropertyMapper tablePropertyMapper) {
+        this.tablePropertyMapper = tablePropertyMapper;
+    }
+
+    public IPage<TablePropertyVO> getTableProperties(int pageNum, int pageSize, String tableName) {
+        Page<TablePropertyVO> page = new Page<>(pageNum, pageSize);
+        return tablePropertyMapper.getTableProperties(page, tableName);
+    }
+}
+~~~
