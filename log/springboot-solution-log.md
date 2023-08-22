@@ -1,4 +1,4 @@
-#### 1、切面方法joinPoint.proceed();的作用
+![image](https://github.com/52Doraemon/52Doraemon/assets/74476598/eb5492e6-513f-44ca-afdc-3ecbb712db99)#### 1、切面方法joinPoint.proceed();的作用
 > 将控制权传递给下一个切面或目标方法
 
 point.proceed()方法用于将控制权传递给下一个切面或目标方法。在应用了多个切面的情况下，**每个切面都需要调用proceed()方法来实现对下一个切面或目标方法的执行。**
@@ -283,3 +283,18 @@ sysLog.setParams(params);
 
 例如，你可能只关心请求的URL，HTTP方法，某些特定的请求头，以及某些特定的请求参数。你可以在你的AOP方法中显式地选择这些属性，并将它们序列化为JSON，而不是尝试序列化整个`HttpServletRequest`对象。
 ~~~
+
+#### 8、SpringBoot直接启动与jar包启动的不同
+
+> 直接运行main class和 jar包启动主要区别是使用的类加载器不同。
+
+通过Jar包的方式运行的加载器为：`LaunchedURLClassLoader`，会有特殊的目录结构要求，所以普通可以被应用的`jar`和可以被`java -jar`运行的jar的目录结构是不一样的。
+
+* 直接启动
+
+命令行输出的含义为：系统类/应用类加载器。在springbbot程序主函数处，加上一句控制台打印消息，打印出加载当前应用的入口函数所在类的加载器信息。
+
+* Jar包的方式启动
+
+通过maven或者gradle等方式对程序进行打包，生成可运行的Jar包，然后通过java -jar xx.jar的方式启动
+
