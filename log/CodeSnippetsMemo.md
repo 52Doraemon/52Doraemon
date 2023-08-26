@@ -330,3 +330,29 @@ public class TablePropertyService {
     }
 }
 ~~~
+
+#### 8、利用异或完成无第三方变量的两数数值交换
+
+> 异或 (^)：无进位相加
+
+**特性**
+
+* 1、0^N=N	N^N=0
+* 2、满足交换律和结合律
+
+~~~java
+// 无第三方变量的数值交换
+// 0^N=N 和交换律结合律的应用
+// 注意：交换的值不能是同一块空间，如果是会被擦除为0，即i!=j
+// 交换arr[i]和arr[j]的值
+piblic ststic void (int[] arr, int i, int j){
+    // ==> arr[i] = arr[i].val ^ arr[j].val; arr[j] = arr[j].val;
+    arr[i] = arr[i] ^ arr[j];
+    
+    // ==> arr[i] = arr[i].val ^ arr[j].val; arr[j] = arr[i].val ^ (arr[j].val ^ arr[j].val) ==> arr[i].val ^ 0 ==> arr[i].val;
+    arr[j] = arr[i] ^ arr[j];
+    
+    // ==> arr[i] = arr[i].val ^ arr[j].val ^ arr[i].val ==> arr[j].val ^ 0 ==> arr[j].val; arr[j] = arr[i].val;
+    arr[i] = arr[i] ^ arr[j];
+}
+~~~
