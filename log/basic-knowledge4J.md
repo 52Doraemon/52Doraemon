@@ -351,3 +351,79 @@ public class NativeMethodExample {
 - `LocalDateTime`是同时包含日期和时间部分的日期时间类，适用于同时处理日期和时间的情况。
 
 在实际开发中，推荐使用新的日期时间API（`java.time`包）中的`LocalDate`和`LocalDateTime`，因为它们提供了更好的设计和更丰富的功能，同时解决了旧版`Date`类存在的问题。
+
+#### 24、Java线程
+
+1. **Thread Name**: 每个线程都有一个名称，便于在调试或者日志输出中区分和识别线程。如果在创建线程的时候没有显式地指定线程名称，系统会为线程分配一个默认的名称。
+2. **Thread ID**: 线程的唯一标识符，用于区分不同的线程。线程ID由系统自动生成，并且在线程的生命周期内保持不变。
+3. **Priority**: 线程的优先级。在操作系统调度线程运行的时候，优先级高的线程有更大的机会被选中运行。Java中，线程优先级的范围是1（Thread.MIN_PRIORITY）到10（Thread.MAX_PRIORITY）。
+4. **Daemon status**: 守护线程标记。如果一个线程是守护线程，那么当所有的非守护线程结束时，它也会自动结束。垃圾回收线程就是一个常见的守护线程。
+5. **Thread State**: 线程的状态。线程在其生命周期中会经历多种状态，包括新建（NEW）、可运行（RUNNABLE）、阻塞（BLOCKED）、等待（WAITING）、限期等待（TIMED_WAITING）和终止（TERMINATED）。
+6. **Thread Group**: 线程所属的线程组。线程组可以用来管理一组相关的线程，对它们进行批量的控制操作。
+7. **Runnable**: 线程要执行的任务，通常是一个实现了Runnable接口的对象。
+8. **UncaughtExceptionHandler**: 未捕获异常处理器。当线程在运行过程中出现未捕获的异常时，会调用这个处理器来处理这个异常。
+9. **Context Class Loader**: 上下文类加载器。线程的上下文类加载器用于加载类和资源。
+
+#### 25、ThreadLocal和线程的关系
+
+`ThreadLocal`并不是线程的一个参数，而是Java中的一个类，它提供了一种将对象的生命周期绑定到线程的能力，使得每个线程都可以有一个该对象的本地版本。
+
+`ThreadLocal`经常被用来解决多线程编程中，变量线程安全的问题。由于`ThreadLocal`为每个线程创建了一份独立的变量副本，所以每个线程在操作这个变量时，实际上只是在操作自己的副本，从而避免了线程安全问题。
+
+例如，在实现数据库连接、会话管理等需要保证每个线程都拥有独立的状态的情况下，`ThreadLocal`就非常有用。每个线程都可以拥有自己的数据库连接或者会话对象，从而避免了多个线程同时操作同一对象可能出现的线程安全问题。
+
+
+
+`ThreadLocal` 是 Java 提供的一种用于实现线程局部变量的机制。每个线程都可以拥有自己的 `ThreadLocal` 变量，每个线程对其进行读写操作只会影响当前线程内的该变量值，不会影响其他线程的该变量值。`ThreadLocal` 变量通常用于防止多线程并发导致数据混乱的问题。
+
+在 Java 中，每个线程都维护了一个 `ThreadLocalMap` 的数据结构，这个 `ThreadLocalMap` 是一个哈希表，用于存储 `ThreadLocal` 变量。键为 `ThreadLocal` 对象，值为该 `ThreadLocal` 对象设置的具体值。
+
+主线程和新创建的线程都有各自的 `ThreadLocal` 变量，它们互不影响。也就是说，`ThreadLocal` 提供了一种方式，使得每个线程都可以拥有自己独立的变量。
+
+ThreadLocal使用的方法
+
+~~~java
+public class ThreadLocalExample {
+
+    // 创建 ThreadLocal 实例
+    public static ThreadLocal<String> threadLocal = new ThreadLocal<>();
+
+    public static void main(String[] args) {
+
+        // 在主线程中设置 ThreadLocal 的值
+        threadLocal.set("Value set in main thread");
+
+        // 在主线程中获取 ThreadLocal 的值
+        String valueInMainThread = threadLocal.get();
+        System.out.println("In main thread, value is: " + valueInMainThread);
+
+        // 创建一个新的线程
+        Thread thread = new Thread(() -> {
+            // 在新线程中设置 ThreadLocal 的值
+            threadLocal.set("Value set in child thread");
+
+            // 在新线程中获取 ThreadLocal 的值
+            String valueInChildThread = threadLocal.get();
+            System.out.println("In child thread, value is: " + valueInChildThread);
+        });
+
+        thread.start();
+        
+        // 删除主线程中的 ThreadLocal 的值，防止内存泄漏
+        threadLocal.remove();
+    }
+}
+//输出：
+//In main thread, value is: Value set in main thread
+//In child thread, value is: Value set in child thread
+~~~
+
+> **即使 ThreadLocal 的实例是同一个，但在不同线程中设置和获取的值是不同的。这就是 ThreadLocal 的特性。**
+
+#### 26、父子线程
+
+在Java中，并没有父子线程的概念。所有线程都独立执行，并且没有特定的父子关系。当我们创建一个新的线程时，这个线程会独立运行，并且它的生命周期和其他线程的生命周期没有直接的关联。
+
+然而，有一种类似父子关系的概念，那就是线程组（Thread Group）。线程组是一种用于管理线程的机制。每个线程都属于一个线程组，线程组可以包含其他线程组，形成树状结构。
+
+举个例子，当我们创建一个新的线程时，如果没有指定线程组，那么新线程将被默认分配到创建它的线程所在的线程组。也就是说，如果线程A在执行过程中创建了线程B，那么线程B将被分配到线程A所在的线程组，可以视作线程A是线程B的"父线程"，但实际上他们并无父子关系，只是在同一个线程组中。
