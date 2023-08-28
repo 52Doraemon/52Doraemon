@@ -427,3 +427,15 @@ public class ThreadLocalExample {
 然而，有一种类似父子关系的概念，那就是线程组（Thread Group）。线程组是一种用于管理线程的机制。每个线程都属于一个线程组，线程组可以包含其他线程组，形成树状结构。
 
 举个例子，当我们创建一个新的线程时，如果没有指定线程组，那么新线程将被默认分配到创建它的线程所在的线程组。也就是说，如果线程A在执行过程中创建了线程B，那么线程B将被分配到线程A所在的线程组，可以视作线程A是线程B的"父线程"，但实际上他们并无父子关系，只是在同一个线程组中。
+
+#### 27、Servlet容器线程池
+
+异步的或者在独立的线程中运行，那么这些线程可能并不会在由 ThreadPoolTaskExecutor 管理的线程池中。
+
+在Spring框架（包括Spring Boot）中，HTTP请求默认是在一个独立的线程中处理的，这些线程通常由Servlet容器（例如Tomcat或Jetty）的线程池管理，而不是由你自己创建的线程池（如`ThreadPoolTaskExecutor`）管理。
+
+所以，即使你在Spring Boot应用程序中配置了自己的`ThreadPoolTaskExecutor`，处理HTTP请求的线程还是由Servlet容器的线程池管理。
+
+另一方面，当我们说“请求是异步的”，通常是指从客户端的角度来看。例如，客户端可以发送一个请求，然后在不等待服务器响应的情况下继续执行其他任务。然而，从服务器（即你的Spring Boot应用程序）的角度来看，每个请求仍然需要在一个线程中被处理，这个线程是由Servlet容器的线程池提供的。
+
+然而，这并不意味着你的`ThreadPoolTaskExecutor`在Spring Boot应用程序中没有用途。你可以在处理HTTP请求的线程中使用`ThreadPoolTaskExecutor`来执行CPU密集型或IO密集型的任务，这样可以避免阻塞处理HTTP请求的线程，提高应用程序的性能和响应能力。
