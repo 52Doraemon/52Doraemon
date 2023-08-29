@@ -116,3 +116,25 @@ mysqld命令：mysqld是MySQL数据库管理系统的守护进程，也称为MyS
 
 # 或者 在 linux 端， `mysql mysql -uroot -p` 输入root密码，进入mysql，执行 `flush hosts;` 重新连接即可
 ~~~
+
+#### 5、MySQL中反引号（`）和单引号（'）区别
+
+> 在MySQL语句中，反引号（`）主要用于标识数据库对象（如表名、列名、别名）。
+
+* 反引号可用于标识包含特殊字符（如空格、关键字），或者与MySQL保留字相同的对象名称。使用反引号可以避免语法错误或歧义。例如：
+~~~
+CREATE TABLE `my table` ...
+SELECT `column name` ...
+SELECT `select` ...
+~~~
+
+* 单引号（'）主要用于表示字符串值。在SQL语句中，**字符串值必须用单引号引起来**。例如：
+~~~
+SELECT customerId, customerName FROM customers WHERE customerName = 'John Smith'
+INSERT INTO products (productName, price) VALUES ('Apple', 2.99)
+~~~
+
+如：
+~~~
+select * from `sys_source_type_config` where `s_type` = 'mysql';
+~~~
