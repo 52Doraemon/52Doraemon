@@ -1,4 +1,5 @@
-![image](https://github.com/52Doraemon/52Doraemon/assets/74476598/eb5492e6-513f-44ca-afdc-3ecbb712db99)#### 1、切面方法joinPoint.proceed();的作用
+![image](https://github.com/52Doraemon/52Doraemon/assets/74476598/eb5492e6-513f-44ca-afdc-3ecbb712db99)
+#### 1、切面方法joinPoint.proceed();的作用
 > 将控制权传递给下一个切面或目标方法
 
 point.proceed()方法用于将控制权传递给下一个切面或目标方法。在应用了多个切面的情况下，**每个切面都需要调用proceed()方法来实现对下一个切面或目标方法的执行。**
@@ -353,3 +354,53 @@ sysLog.setParams(params);
 如果你配置了一个数据源管理器，能够在运行时根据特定条件动态选择要使用的数据源，则这属于动态数据源的概念。
 
 所以说，从数据库读取的数据源信息本身并不决定这些数据源是多数据源还是动态数据源。这主要取决于如何在应用程序中使用这些数据源信息，以及想实现的数据源管理策略。
+
+#### 11、注解`@Controller`和`@RestController`的区别
+
+在Spring MVC中，`@Controller`和`@RestController`注解用于标识控制器类。两者的区别在于返回值的处理方式：
+
+- `@Controller`：表示该类是一个控制器类，并且处理请求时会根据方法的返回值进行视图解析和渲染。方法可以返回视图名称或`ModelAndView`对象。**`@Controller`注解的处理方式会尝试进行视图解析，而不是直接返回数据。**
+- `@RestController`：表示该类是一个控制器类，但所有请求处理方法都会返回数据（例如JSON、XML等）而**不是进行视图解析和渲染**。Spring会自动将返回的数据序列化为相应的格式，并设置正确的响应头。
+
+在Spring MVC中，使用`@Controller`注解标识的类中的方法通常被称为请求处理方法。这些方法用于处理客户端发送的HTTP请求，并生成响应返回给客户端。
+
+根据`@Controller`注解的特性，处理请求方法的返回值可以是以下两种类型：
+
+1、视图名称（String类型）：当方法返回一个视图名称时，Spring会根据视图解析器（View Resolver）来解析该视图名称，并将其渲染为最终的响应内容。视图解析器将根据配置的规则和视图模板来确定要呈现的实际视图。视图名称通常对应于一个视图模板文件（如JSP、Thymeleaf模板等）。
+
+示例代码：
+
+~~~~java
+@Controller
+public class MyController {
+
+    @RequestMapping("/hello")
+    public String hello() {
+        return "hello"; // 返回视图名称
+    }
+}
+~~~~
+
+在上述示例中，当请求匹配到`/hello`路径时，`hello()`方法返回一个视图名称`"hello"`。Spring会将其解析为具体的视图模板，然后将模板渲染为响应内容。
+
+2、ModelAndView对象：`ModelAndView`是一个包含视图名称和模型数据的类。通过返回`ModelAndView`对象，你可以同时指定视图名称和要传递给视图的模型数据。
+
+示例代码：
+
+~~~~java
+@Controller
+public class MyController {
+
+    @RequestMapping("/hello")
+    public ModelAndView hello() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("hello"); // 设置视图名称
+        modelAndView.addObject("message", "Hello, World!"); // 设置模型数据
+        return modelAndView;
+    }
+}
+~~~~
+
+在上述示例中，`hello()`方法返回一个`ModelAndView`对象，其中设置了视图名称为`"hello"`，并添加了一个名为`"message"`的模型数据。Spring会将模型数据传递给相应的视图模板进行渲染。
+
+总结来说，`@Controller`注解用于标识控制器类，而其中的方法用于处理请求。这些方法可以返回视图名称或`ModelAndView`对象，从而通过视图解析器进行视图解析和渲染，最终生成响应内容返回给客户端。
