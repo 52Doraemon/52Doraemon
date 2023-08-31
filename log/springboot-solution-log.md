@@ -1,4 +1,24 @@
 ![image](https://github.com/52Doraemon/52Doraemon/assets/74476598/eb5492e6-513f-44ca-afdc-3ecbb712db99)
+#### 0、Springboot的核心注解
+
+Spring Boot 提供了一系列核心注解，用于配置和启动应用程序。以下是一些常用的 Spring Boot 核心注解：
+
+1. `@SpringBootApplication`：这是一个组合注解，用于标识主要的应用程序类。它包含了以下三个注解的功能：
+   - `@Configuration`：指示该类是一个配置类，用于定义 Bean。
+   - `@EnableAutoConfiguration`：启用 Spring Boot 的自动配置功能，根据依赖和配置自动配置应用程序。
+   - `@ComponentScan`：自动扫描并注册 Spring 组件，包括控制器、服务等。
+2. `@RestController`：用于标识控制器类，将其识别为处理 RESTful 请求的类。它结合了 `@Controller` 和 `@ResponseBody` 注解的功能。
+3. `@RequestMapping`：用于映射请求路径和处理方法。可以用于类级别和方法级别，指定处理请求的 URL 路径。
+4. `@Autowired`：用于自动注入依赖，通过类型匹配进行依赖注入。
+5. `@Value`：用于将属性值注入到字段或方法参数中。可以用于注入配置文件中的属性值。
+6. `@Component`：用于标识一个类为 Spring 组件，可以被自动扫描并注册到 Spring 容器中。
+7. `@Service`：用于标识一个类为业务逻辑层的组件，通常用于服务类。
+8. `@Repository`：用于标识一个类为数据访问层的组件，通常用于 DAO 类。
+9. `@ConfigurationProperties`：用于将配置文件中的属性值绑定到一个 Java 类中，可以通过 `@ConfigurationProperties(prefix = "prefix")` 指定属性的前缀。
+
+这些注解是 Spring Boot 中常用的核心注解，它们用于配置和控制应用程序的行为、管理依赖注入和声明 Spring 组件等。通过使用这些注解，可以快速搭建和配置 Spring Boot 应用程序。根据具体需求，还可以使用其他更特定的注解来实现更多的功能和配置。
+
+
 #### 1、切面方法joinPoint.proceed();的作用
 > 将控制权传递给下一个切面或目标方法
 
