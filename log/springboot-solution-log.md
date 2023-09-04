@@ -428,3 +428,80 @@ public class MyController {
 在上述示例中，`hello()`方法返回一个`ModelAndView`对象，其中设置了视图名称为`"hello"`，并添加了一个名为`"message"`的模型数据。Spring会将模型数据传递给相应的视图模板进行渲染。
 
 总结来说，`@Controller`注解用于标识控制器类，而其中的方法用于处理请求。这些方法可以返回视图名称或`ModelAndView`对象，从而通过视图解析器进行视图解析和渲染，最终生成响应内容返回给客户端。
+
+#### 12、Springboot启动进行初始化操作的常用方法
+
+> Spring Boot 提供了多种进行初始化操作的方法，这些操作通常会在应用启动时执行。
+
+1. ApplicationRunner 和 CommandLineRunner 接口
+
+这两个接口可以用来执行一些初始化任务。ApplicationRunner 提供一个 run(ApplicationArguments args) 方法，而 CommandLineRunner 提供一个 run(String... args) 方法。
+
+~~~java
+@Component
+public class MyApplicationRunner implements ApplicationRunner {
+    @Override
+    public void run(ApplicationArguments args) {
+        // 初始化代码
+    }
+}
+
+@Component
+public class MyCommandLineRunner implements CommandLineRunner {
+    @Override
+    public void run(String... args) {
+        // 初始化代码
+    }
+}
+~~~
+
+2. @PostConstruct 注解
+
+该注解用于修饰一个非静态的 void 方法，被修饰的方法会在依赖注入完成后，且在 ApplicationContext 被加载后执行。
+
+~~~java
+@Component
+public class MyInitializer {
+    @PostConstruct
+    public void init() {
+        // 初始化代码
+    }
+}
+~~~
+
+3. 监听 Application 事件
+
+Spring Boot 有一系列的生命周期事件，例如 ApplicationReadyEvent。你可以定义一个监听器来捕捉这些事件。
+
+~~~java
+@Component
+public class MyApplicationListener implements ApplicationListener<ApplicationReadyEvent> {
+    @Override
+    public void onApplicationEvent(ApplicationReadyEvent event) {
+        // 初始化代码
+    }
+}
+~~~
+
+4. SpringApplication.addInitializers(...)
+
+通过 SpringApplication 类，你可以添加一个或多个 ApplicationContextInitializer 接口的实现。
+
+~~~java
+public class MyApplicationContextInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+        // 初始化代码
+    }
+}
+~~~
+
+然后在 main 方法中：
+
+~~~java
+public static void main(String[] args) {
+    SpringApplication application = new SpringApplication(MyApplication.class);
+    application.addInitializers(new MyApplicationContextInitializer());
+    application.run(args);
+}
+~~~
