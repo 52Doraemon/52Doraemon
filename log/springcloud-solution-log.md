@@ -60,3 +60,41 @@
 
 **以上三个部分共同组成了一个完整的微服务的子服务，各自的职责和作用相对独立，但又相互配合，共同实现子服务的功能和运行。**
 
+#### 3、微服务子服务配置文件（yml）
+
+~~~yml
+# 服务器的相关设置
+server:
+  # 应用的监听端口号
+  port: 7010
+# Spring框架相关的设置
+spring:
+  # 指定了应用的名称
+  application:
+    name: jeecg-wgp
+  cloud:
+    # 配置Nacos作为配置中心的相关设置
+    nacos:
+      # config部分定义Nacos配置中心的地址(server-addr)、配置组(group)、命名空间(namespace)、用户名(username)和密码(password)等
+      config:
+        server-addr: '@config.server-addr@'
+        group: '@config.group@'
+        namespace: '@config.namespace@'
+        username: '@config.username@'
+        password: '@config.password@'
+      # discovery部分用于将Nacos作为服务注册与发现中心的相关设置。其中的server-addr指定Nacos的地址，namespace指定命名空间，username和password指定登录Nacos的用户名和密码，group指定服务的分组。
+      discovery:
+        server-addr: ${spring.cloud.nacos.config.server-addr}
+        namespace: '@config.namespace@'
+        username: '@config.username@'
+        password: '@config.password@'
+        group: '@config.group@'
+  # config.import部分用于导入外部配置文件，这里使用Nacos作为配置中心，并根据不同的配置文件后缀来加载对应的配置文件。
+  config:
+    import:
+      - optional:nacos:jeecg.yaml
+      - optional:nacos:jeecg-wgp-@profile.name@.yaml
+      - optional:nacos:jeecg-normal-@profile.name@.yaml
+~~~
+
+#### 4、
