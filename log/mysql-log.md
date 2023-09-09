@@ -138,3 +138,43 @@ INSERT INTO products (productName, price) VALUES ('Apple', 2.99)
 ~~~
 select * from `sys_source_type_config` where `s_type` = 'mysql';
 ~~~
+
+#### 6、MySQL时间列数据类型 `datetime` 和 `timestamp`
+
+> 考虑方面：存储空间、时区支持、时间范围等等
+
+是否能够根据项目中实际需求做出合理的数据库设计决策
+
+* 1、`datetime`和`timestamp`的区别
+
+**存储空间：**
+
+  timestamp：四个字节
+  
+  datetime：八个字节
+
+**时区支持：**
+
+  timestamp存储的是一个UTC时间，会根据系统的时区进行自动转化，满足需要在不同时区之间工作可以考虑
+  
+  datetime不会做时区转化，存储的是字面值的时间
+
+**时间范围：**
+
+  timestamp时间范围是1970年到2038年
+  
+  datetime时间范围是1000年到9999年
+
+* 2、选择建议
+
+需要存储的时间超出timestamp的范围，或者不想让时区影响存储的时间值-->使用datetime
+
+需要考虑不同地区的时区问题或者希望节省存储空间-->使用timestamp
+
+* 3、实际开发注意方面
+
+明确项目的需求和期望的行为，不要盲目选择
+
+在代码中统一时间的处理方式，以避免时区转换等问题
+
+#### 7、
