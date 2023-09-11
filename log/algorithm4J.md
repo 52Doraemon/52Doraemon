@@ -71,3 +71,151 @@ public class DynamicProgramming {
 
 这个问题具有“重叠子问题”和“最优子结构”的性质，因此通常使用动态规划来解决。
 
+#### 2、敏感词控制算法实现
+
+> DFA（确定有限自动机）、Trie树（字典树）或KMP算法
+
+1、**DFA（Deterministic Finite Automaton，确定有限自动机）**
+
+DFA是用于识别正则或者模式的基础机器模型。它由一个有限的状态集合、一个字母表（输入符号类型）、一个转移函数、一个开始状态和一个或多个接受状态组成。DFA是唯一确定的，意味着对于每一对（状态、输入符号）都有唯一确定的转换到下一状态。
+
+应用场景：
+
+    字符串匹配
+    词法分析
+    网络协议的实现
+    Trie树（字典树）
+
+DFA算法的核心类：
+
+~~~java
+// 导入所需的类库
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+// 类定义
+public class DFASensitiveWordFilter {
+    // 敏感词Map，用于构建DFA
+    private final Map<Object, Object> sensitiveWordMap;
+
+    // 构造函数，接受一个敏感词Set
+    public DFASensitiveWordFilter(Set<String> sensitiveWords) {
+        // 初始化sensitiveWordMap
+        sensitiveWordMap = new HashMap<>();
+        // 遍历所有的敏感词
+        for (String word : sensitiveWords) {
+            Map<Object, Object> currentMap = sensitiveWordMap;
+            // 遍历敏感词的每一个字符
+            for (char ch : word.toCharArray()) {
+                Object value = currentMap.get(ch);
+                // 如果这个字符没有对应的子Map，就创建一个
+                if (value == null) {
+                    Map<Object, Object> newMap = new HashMap<>();
+                    newMap.put("isEnd", false);
+                    currentMap.put(ch, newMap);
+                    currentMap = newMap;
+                } else {
+                    // 否则，移动到该字符对应的子Map
+                    currentMap = (Map<Object, Object>) value;
+                }
+            }
+            // 设置“isEnd”为true，表示这是一个完整的敏感词
+            currentMap.put("isEnd", true);
+        }
+    }
+
+    // 检查一个文本中是否包含敏感词
+    public boolean containsSensitiveWord(String text) {
+        // 从文本的每一个字符开始检查
+        for (int i = 0; i < text.length(); i++) {
+            Map<Object, Object> currentMap = sensitiveWordMap;
+            // 从当前字符开始，遍历之后的字符
+            for (int j = i; j < text.length(); j++) {
+                // 逐一检查字符是否构成敏感词
+                currentMap = (Map<Object, Object>) currentMap.get(text.charAt(j));
+                if (currentMap == null) {
+                    // 如果没有匹配的，直接跳出
+                    break;
+                }
+                // 如果找到一个完整的敏感词（即"isEnd"为true），则返回true
+                if ((boolean) currentMap.get("isEnd")) {
+                    return true;
+                }
+            }
+        }
+        // 如果没有找到任何敏感词，则返回false
+        return false;
+    }
+}
+~~~
+
+在Spring Boot Controller中引入这个敏感词过滤器：
+
+~~~java
+// 引入Spring Web的注解和类
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+// 引入Java的HashSet和Set接口，用于存储敏感词
+import java.util.HashSet;
+import java.util.Set;
+
+// @RestController注解表示这是一个RESTful Web Service的Controller
+@RestController
+public class CommentController {
+    // 创建一个final的DFASensitiveWordFilter对象，用于后续的敏感词检测
+    private final DFASensitiveWordFilter sensitiveWordFilter;
+
+    // 构造函数
+    public CommentController() {
+        // 创建一个HashSet对象存储敏感词，这里仅为示例，实际场景可能需要从数据库或配置文件读取
+        Set<String> sensitiveWords = new HashSet<>();
+        sensitiveWords.add("敏感词1");
+        sensitiveWords.add("敏感词2");
+        
+        // 使用敏感词集合初始化DFASensitiveWordFilter对象
+        this.sensitiveWordFilter = new DFASensitiveWordFilter(sensitiveWords);
+    }
+
+    // @PostMapping注解表示这个方法用于处理HTTP POST请求，路径为"/comment"
+    @PostMapping("/comment")
+    // 使用@RequestBody注解告诉Spring将HTTP请求体转换为Java String对象
+    public String postComment(@RequestBody String comment) {
+        // 使用DFASensitiveWordFilter的containsSensitiveWord方法检查评论中是否包含敏感词
+        if (sensitiveWordFilter.containsSensitiveWord(comment)) {
+            // 如果评论中包含敏感词，返回提示信息
+            return "评论包含敏感词，请重新输入";
+        }
+        // 在这里，你可以添加其他业务逻辑，比如将评论保存到数据库
+        // 如果一切正常，返回评论成功的消息
+        return "评论成功";
+    }
+}
+~~~
+
+2、**Trie树，也称为前缀树或字典树**
+
+Trie树通常用于搜索具有相同前缀的字符串。一个Trie树通常保存大量的字符串，并能在O(n)的时间复杂度内查找任意字符串或前缀（n为字符串长度）。
+
+应用场景：
+
+    字符串搜索
+    前缀匹配
+    拼写检查
+    KMP算法（Knuth-Morris-Pratt）
+
+3、**KMP算法**
+
+KMP算法是一种高效的字符串搜索（子串查找）算法，由Donald Knuth、Vaughan Pratt和James H. Morris发明。相对于简单的暴力算法，KMP算法能在O(N)时间内完成字符串匹配任务（N为文本长度）。
+
+KMP算法预处理模式串（子串）并构建一个“部分匹配表”（也称为“失败函数”），用于在不匹配时跳过尽可能多的字符。
+
+应用场景：
+
+    文本搜索
+    数据挖掘
+    DNA序列匹配
+    
+这些算法各自有其优势和应用场景，根据实际问题来选择适合的算法非常重要。例如，在实现敏感词过滤时，DFA算法由于其确定性和高效性通常是首选。但如果你需要快速查找或插入大量字符串，Trie树可能是更好的选择。如果你的任务是在一个长文本中找到一个特定的子串，KMP算法可能是最适合的。
