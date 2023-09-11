@@ -506,7 +506,7 @@ public static void main(String[] args) {
 }
 ~~~
 
-#### logback-spring.xml
+#### 13、logback-spring.xml
 
 ~~~xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -601,3 +601,113 @@ public static void main(String[] args) {
 
 </configuration>
 ~~~
+
+#### 14、Servlet对于SpringBoot
+
+Servlet（Server Applet）是用于Java Web应用的服务器端程序模型，并且Servlet API是Java企业版（Java EE）的一部分。在早期的Java Web应用开发中，Servlet扮演着非常重要的角色，负责处理客户端请求并生成响应。
+
+Spring Boot是一个简化Spring应用开发的框架，它内置了对Servlet的支持，但在日常的Spring Boot应用开发中，直接使用Servlet并不是很常见。这是因为Spring Boot提供了更高级的抽象，例如使用@Controller和@RestController注解创建RESTful API，这些抽象背后还是依赖于Servlet。
+
+Spring Boot能够自动配置嵌入的Servlet容器（如Tomcat、Jetty或Undertow），使开发者不需要过多关注底层的Servlet细节。但是，对于某些特殊的用例，例如，需要自定义HTTP请求和响应的处理流程，或者需要与遗留系统集成，了解Servlet仍然是有益的。
+
+简而言之，Servlet对于Spring Boot的工作原理和底层实现来说是重要的，但在常见的应用开发场景中，开发者不一定需要直接使用或深入了解Servlet。然而，具备Servlet知识对于理解Web应用的工作机制以及处理一些特殊需求是有帮助的。
+
+#### 15、Servlet原理和作用
+
+> Servlet（Server Applet）是一种运行在服务器端的Java程序，用于处理客户端请求并生成响应。它是Java EE（Java Platform, Enterprise Edition）规范的一部分，尤其是用于构建Web应用。
+
+**Servlet原理**
+
+* 生命周期：Servlet在第一次被访问或根据配置被服务器加载时实例化。之后，它将一直在内存中存在，直到Web应用被卸载或服务器关闭。
+
+* 请求处理：当HTTP请求到达Servlet容器（例如Tomcat）时，容器会创建一个新的线程（或从线程池中取出一个线程）并调用Servlet的service()方法。
+
+* service()方法：这个方法会根据HTTP请求的类型（GET、POST、PUT、DELETE等）来调用相应的doGet(), doPost()等方法。
+
+* 响应生成：Servlet使用HTTPServletResponse对象来生成响应，这个响应随后由Servlet容器发送回客户端。
+
+* 销毁：当Web应用被卸载或服务器关闭时，Servlet的destroy()方法被调用，用于释放资源。
+
+**Servlet作用**
+
+* 请求处理：Servlet主要用于处理来自Web客户端（通常是浏览器）的请求。
+
+* 数据处理与储存：Servlet可以与数据库交互，执行CRUD（创建、读取、更新、删除）操作。
+
+* 会话管理：Servlet支持多种会话管理机制，如Cookie、Session等。
+
+* MVC架构：在MVC（Model-View-Controller）架构中，Servlet通常作为控制器（Controller）来使用，处理业务逻辑并协调视图（View）和模型（Model）。
+
+* API提供：除了生成HTML页面，Servlet也可以用于创建RESTful或SOAP Web服务。
+
+* 过滤和拦截：通过Filter，Servlet可以实现请求的预处理和响应的后处理，用于安全认证、日志记录等。
+
+* 与前端交互：Servlet可以生成HTML、XML或JSON数据，与前端JavaScript代码交互。
+
+* 集群与负载均衡：Servlet容器通常提供了集群和负载均衡的解决方案，这使得Servlet能够更好地适应大规模、高并发的环境。
+
+了解Servlet的原理和作用不仅能帮助你更好地理解Web应用的底层机制，还能让你在遇到复杂或特殊需求时，有更多的解决方案可供选择。
+
+#### 16、Servlet和Tomcat的关系
+
+Servlet和Tomcat之间的关系非常紧密，但两者在功能和定位上有明确的差异。
+
+**Servlet：**
+
+* 定义和规范：Servlet 是一种 Java 类，用于扩展能够响应客户端请求的服务器的功能。Servlet 是 JavaEE 规范的一部分。
+
+* 程序逻辑：Servlet 负责处理来自 Web 客户端（通常是 Web 浏览器）的请求，执行业务逻辑，然后生成响应给客户端。
+
+* 通用性：Servlet 不依赖特定的 Web 服务器，任何遵循 JavaEE 规范的 Web 服务器都能运行 Servlet。
+
+* 生命周期：由 Servlet 容器（如 Tomcat）负责管理。
+
+**Tomcat：**
+
+* Web 容器：Tomcat 是一个实现了 Servlet、JSP 和 Java WebSocket 规范的 Web 容器。
+
+* Servlet 管理：Tomcat 负责管理 Servlet 的生命周期，包括加载、初始化、处理请求和销毁。
+
+* HTTP 服务器：虽然主要是作为 Web 容器使用，但 Tomcat 也是一个功能简单的 HTTP 服务器。
+
+* 配置与扩展：Tomcat 有许多配置选项，用于处理日志、安全性、数据库连接等，还可以通过自定义 Valve、Filter、Listener 等进行扩展。
+
+**关系：**
+
+* 承载与执行：Tomcat 是一个常用的 Servlet 容器，用于承载并执行 Servlet。
+
+* 生命周期管理：Tomcat 负责管理 Servlet 的整个生命周期，包括初始化、请求处理和销毁。
+
+* 请求与响应：当一个 HTTP 请求到达 Tomcat，Tomcat 会将这个请求交给相应的 Servlet 进行处理，并将 Servlet 的响应返回给客户端。
+
+* 资源管理：Tomcat 提供了各种服务和资源（如 JNDI、线程池、数据库连接池等）给 Servlet 使用。
+
+* 部署与发布：开发者通常将编写好的 Servlet 打包成 WAR 文件，然后部署到 Tomcat 上。
+
+简言之，Servlet 是用于处理 HTTP 请求和生成响应的 Java 程序，而 Tomcat 是一个 Servlet 容器，用于管理和运行 Servlet。
+
+#### 17、Servlet实际上是java的一个类？
+
+Servlet 不仅仅是一个 Java 类，它是一种 Java API 规范，用于 Web 开发。这个规范定义了用于创建动态 Web 页面的类和接口。在这个规范中，javax.servlet.Servlet 是一个核心接口，任何 Servlet 类都必须实现这个接口（或者继承已经实现这个接口的类，如 HttpServlet）。
+
+当我们谈到一个具体的 "Servlet" 时，通常是指一个实现了 Servlet 接口（或扩展了某个已经实现了 Servlet 接口的类）的 Java 类。这个类需要重写某些方法，如 doGet() 或 doPost()，以处理 HTTP GET 或 POST 请求。
+
+例如，一个简单的 HttpServlet 类可能看起来像这样：
+
+~~~java
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+public class MyServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        resp.getWriter().write("Hello, World!");
+    }
+}
+~~~
+
+这个类继承自 HttpServlet，并重写了 doGet 方法以处理 HTTP GET 请求。
+
+总的来说，当我们说 Servlet 是一个 Java 类时，是指它是一个遵循特定 Java API 规范的 Java 类。这个规范定义了如何接收和响应客户端请求，以及如何与 Web 服务器（或 Servlet 容器，如 Tomcat）交互。
