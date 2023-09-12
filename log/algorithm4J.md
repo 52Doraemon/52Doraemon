@@ -147,6 +147,38 @@ public class DFASensitiveWordFilter {
         // 如果没有找到任何敏感词，则返回false
         return false;
     }
+
+    // 将文本中的敏感词替换为屏蔽字符串
+    public String replaceSensitiveWords(String text) {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < text.length(); i++) {
+            Map<Object, Object> currentMap = sensitiveWordMap;
+            int start = i; // 敏感词开始的位置
+            int length = 0; // 敏感词的长度
+            boolean isEnd = false;
+    
+            for (int j = i; j < text.length(); j++) {
+                currentMap = (Map<Object, Object>) currentMap.get(text.charAt(j));
+                if (currentMap == null) {
+                    break;
+                }
+                length++; // 敏感词的长度加1
+                if ((boolean) currentMap.get("isEnd")) {
+                    isEnd = true;
+                    break;
+                }
+            }
+    
+            if (isEnd) { // 找到一个完整的敏感词
+                result.append("***");
+                i = start + length - 1; // 跳过这个敏感词
+            } else {
+                result.append(text.charAt(i));
+            }
+        }
+    
+        return result.toString();
+    }
 }
 ~~~
 
