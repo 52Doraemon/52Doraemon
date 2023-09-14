@@ -227,6 +227,16 @@ public class CommentController {
 }
 ~~~
 
+如果不希望外界通过new来创建DFASensitiveWordFilter的实例，有几种方式可以实现：
+
+* Singleton Pattern（单例模式）: 将DFASensitiveWordFilter的构造函数设置为private，并提供一个public static方法来获取实例。
+
+* Spring的@Component注解: 如果你使用Spring框架，可以通过@Component、@Service等注解让Spring容器管理DFASensitiveWordFilter的实例。
+
+* Factory Pattern（工厂模式）: 使用一个工厂类来创建DFASensitiveWordFilter的实例。
+
+
+
 2、**Trie树，也称为前缀树或字典树**
 
 Trie树通常用于搜索具有相同前缀的字符串。一个Trie树通常保存大量的字符串，并能在O(n)的时间复杂度内查找任意字符串或前缀（n为字符串长度）。
