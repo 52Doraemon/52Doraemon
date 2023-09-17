@@ -472,4 +472,18 @@ integer和int的区别有很多，简单罗列三个方面：
 至于为什么要设计成封装类型，我认为的主要原因是Java本身就是一门面向对象的语言，一切操作都是以对象作为基础的，比如说像集合里面存的元素，也只支持Object类型，普通类型是无法通过集合来存储的。
 ```
 
-#### 29、
+#### 29、javax是什么包
+
+> javax 是 Java 的一个扩展（Extension）包命名空间，其中包含一系列用于企业级应用的类和接口。这个命名空间下面有很多子包，这些子包通常都是一些特定的 Java 技术或框架的组成部分。
+
+例如：
+
+* javax.servlet 和 javax.servlet.http：包含了用于开发动态 Web 应用的 Servlet 和 HTTP 相关的类和接口。
+* javax.jms：Java 消息服务（Java Message Service）的 API。
+* javax.naming：Java 命名和目录接口（Java Naming and Directory Interface, JNDI）的 API。
+* javax.transaction：包含了 Java 事务处理的相关类和接口。
+* javax.persistence：Java 持久化 API（Java Persistence API, JPA）的一部分。
+* 
+值得注意的是，随着 Java 的发展和模块化，一些新的包和框架已经开始使用 jakarta 命名空间代替 javax，尤其在 Eclipse Foundation 接手 Java EE（现更名为 Jakarta EE）后。
+
+javax 命名空间内的类和接口通常不是 Java 标准库（Java SE）的一部分，而是需要额外导入的。这些通常会作为独立的库（JAR 文件）提供，或者作为更大框架和服务器（如 Tomcat、WildFly 等）的一部分来提供。
