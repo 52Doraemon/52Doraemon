@@ -53,3 +53,14 @@ Servlet处理完成后，生成的响应将通过HttpServletResponse对象返回
 **7. 结束**
 
 最后，所有的资源都会被释放，包括输入输出缓冲区、请求和响应对象等。线程返回到线程池，等待处理下一个请求。
+
+#### 1、Servlet在Tomcat的javax包中而不是jdk中携带Servlet 
+
+HttpServlet 类以及其他与 Servlet 相关的类和接口并不是 JDK 或 Java SE（标准版）的一部分。它们实际上是 Java EE（现在称为 Jakarta EE）或者 Servlet 容器（如 Tomcat、Jetty 等）提供的。
+
+当你在使用 Tomcat 这样的 Servlet 容器时，这些类会作为容器的一部分被提供。具体来说，当你下载并安装 Tomcat 时，你会在 Tomcat 的 lib 目录下找到一个名为 servlet-api.jar 的文件，这个 JAR 文件就包含了 HttpServlet 类以及其他与 Servlet 相关的类和接口。
+
+因此，当你在开发使用 Servlet 的 Web 应用时，你需要将这个 JAR 文件加入到你的项目依赖中（或者在编译路径中），以便你的代码能够正常编译和运行。
+
+这样设计的一个主要原因是，Servlet 是用于构建动态 Web 应用的技术，而不是所有 Java 应用都需要 Web 功能。把它放在 Java EE 或者独立的 Servlet 容器中，可以让 Java SE 保持相对的“轻量级”，同时也让 Servlet 技术能够更加灵活地发展和演进。
+
