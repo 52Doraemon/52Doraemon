@@ -374,3 +374,101 @@ piblic ststic void (int[] arr, int i, int j){
 在使用Java的split("?") 部分涉及到正则表达式。问号（?）是正则表达式中的特殊字符，表示前一个字符出现0次或1次。因此，如果想按照字面的问号字符进行分割，需要对它进行转义。可以使用两个反斜杠对问号进行转义
 
 > split("\\?")
+
+#### 11、Spring Boot中，三种不同类型的参数（请求路径、请求体、请求体）一般是用不同的注解来处理的
+
+1、请求路径参数（URI）（URL路径中的参数）: 使用@PathVariable注解来获取路径中的参数。例如：
+
+~~~java
+@GetMapping("/greet/{name}")
+public String greetPath(@PathVariable String name) {
+    return "Hello, " + name;
+}
+~~~
+
+请求URL可能是：**http://localhost:8080/greet/John**
+
+2、请求查询参数（Query Parameters）（URL问号后面的参数）: 使用@RequestParam注解获取查询参数。例如：
+
+~~~java
+@GetMapping("/greet")
+public String greetQuery(@RequestParam(name = "name", defaultValue = "Guest") String name) {
+    return "Hello, " + name;
+}
+~~~
+
+**@RequestParam主要是用于处理请求查询参数，与请求头和请求体的参数是不同的。**
+请求URL可能是：**http://localhost:8080/greet?name=John**
+
+3、请求体（Body）参数（主要用于POST、PUT请求）: 使用@RequestBody注解。例如：
+
+~~~java
+@PostMapping("/greet")
+public String greetBody(@RequestBody Map<String, String> body) {
+    String name = body.getOrDefault("name", "Guest");
+    return "Hello, " + name;
+}
+
+// 还可以直接用对象接收
+// 对于请求体中的参数，你可以直接在方法参数列表中加入要绑定的Java对象。Spring 会自动将请求体中的参数绑定到这个对象上。这通常用于POST和PUT请求。
+@PostMapping("/users")
+public String createUser(@RequestBody User user) {
+    // 处理逻辑
+    return "User created: " + user.getName();
+}
+~~~
+
+在这个例子中，请求体可能是一个JSON对象：{"name": "John"}
+请求URL是：**http://localhost:8080/greet**
+
+4、请求头（Headers）参数: 使用@RequestHeader注解可以直接获取请求头中的参数。例如：
+
+~~~java
+@GetMapping("/greet")
+public String greetHeader(@RequestHeader(name = "User-Agent") String userAgent) {
+    return "User-Agent: " + userAgent;
+}
+~~~
+
+5、复杂的请求参数：如果一个请求可能包含多种参数，你还可以使用HttpServletRequest对象来手动获取
+
+~~~java
+@RequestMapping("/info")
+public String info(HttpServletRequest request) {
+    String id = request.getParameter("id");
+    String header = request.getHeader("User-Agent");
+    // 处理逻辑
+    return "Info";
+}
+~~~
+
+```
+@RequestMapping("/greet")
+public String greet(@RequestParam(name = "name", defaultValue = "Guest") String name) {
+    return "Hello, " + name;
+}
+
+在Spring Boot中，@RequestMapping注解默认是可以处理所有类型的HTTP请求，包括GET、POST、PUT、DELETE等。这意味着，如果你没有明确指定请求类型，那么任何类型的请求都可以被处理。
+
+关于@RequestParam，它用于获取查询参数，这些参数通常出现在URL的查询字符串中，与HTTP方法（GET、POST等）无关。
+
+例如，以下两种请求都可以被上面的代码块处理：
+
+GET请求：http://localhost:8080/greet?name=John
+POST请求：http://localhost:8080/greet（在请求体或者请求头中没有关于name的信息，但是可以通过表单或者以其他方式将name=John作为查询参数发送）
+如果你想明确处理特定类型的HTTP请求，可以使用@GetMapping、@PostMapping、@PutMapping、@DeleteMapping等专用的注解。
+
+@GetMapping("/greet")
+public String greetGet(@RequestParam(name = "name", defaultValue = "Guest") String name) {
+    return "Hello, " + name + " from GET request";
+}
+
+@PostMapping("/greet")
+public String greetPost(@RequestParam(name = "name", defaultValue = "Guest") String name) {
+    return "Hello, " + name + " from POST request";
+}
+
+在这个例子中，GET和POST请求有各自对应的处理方法。
+
+综上，@RequestParam是与HTTP方法无关的，它只与请求参数有关。而HTTP方法的处理可以通过专用的注解或者通过在@RequestMapping里指定method属性来区分。
+```
