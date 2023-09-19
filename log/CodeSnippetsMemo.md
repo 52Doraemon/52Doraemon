@@ -472,3 +472,200 @@ public String greetPost(@RequestParam(name = "name", defaultValue = "Guest") Str
 
 综上，@RequestParam是与HTTP方法无关的，它只与请求参数有关。而HTTP方法的处理可以通过专用的注解或者通过在@RequestMapping里指定method属性来区分。
 ```
+
+#### 12、Mybatis的动态sql编写语法和案例
+
+MyBatis 提供了多种动态 SQL 的编写方式，允许根据不同条件生成不同的 SQL 语句。
+
+1. <if> 元素
+
+用于进行条件判断。如果条件为 true，则会包含内部的 SQL 片段。
+
+XML 配置示例：
+
+~~~xml
+<select id="findUsers" resultType="User">
+    SELECT * FROM users
+    WHERE 1=1
+    <if test="username != null">
+        AND username = #{username}
+    </if>
+    <if test="age != null">
+        AND age = #{age}
+    </if>
+</select>
+~~~
+
+2. <choose> <when> <otherwise> 元素
+
+类似于 Java 里面的 switch-case-default。
+
+XML 配置示例：
+
+~~~xml
+<select id="findUser" resultType="User">
+    SELECT * FROM users
+    <choose>
+        <when test="username != null">
+            WHERE username = #{username}
+        </when>
+        <when test="email != null">
+            WHERE email = #{email}
+        </when>
+        <otherwise>
+            WHERE id = -1
+        </otherwise>
+    </choose>
+</select>
+~~~
+
+3. <foreach> 元素
+
+用于遍历集合。
+
+XML 配置示例：
+
+~~~xml
+<select id="findUsersByIds" resultType="User">
+    SELECT * FROM users
+    WHERE id IN
+    <foreach item="id" index="index" collection="ids" open="(" separator="," close=")">
+        #{id}
+    </foreach>
+</select>
+~~~
+
+4. <trim> <where> <set> 元素
+
+用于自定义 SQL 片段。
+
+<trim>：自定义前缀和后缀。
+
+<where>：自动处理 WHERE 子句。
+
+<set>：用于 UPDATE 语句，自动处理字段更新。
+
+XML 配置示例：
+
+~~~xml
+<update id="updateUser" parameterType="User">
+    UPDATE users
+    <set>
+        <if test="username != null">
+            username = #{username},
+        </if>
+        <if test="age != null">
+            age = #{age},
+        </if>
+    </set>
+    WHERE id = #{id}
+</update>
+~~~
+
+5. <bind> 元素
+
+用于创建一个变量，并将其绑定到一个表达式上。
+
+XML 配置示例：
+
+~~~xml
+<select id="findUserByName" resultType="User">
+    <bind name="pattern" value="'%' + username + '%'"/>
+    SELECT * FROM users WHERE username LIKE #{pattern}
+</select>
+~~~
+
+```
+在 MyBatis 中，可以通过多种方式向 Mapper 方法传递参数。
+
+1. 单一参数
+如果只有一个参数，可以直接在 SQL 中使用 #{} 指定参数名称。
+
+Java Mapper 接口：
+
+java
+Copy code
+public interface UserMapper {
+    User findUserById(Integer id);
+}
+XML 配置：
+
+xml
+Copy code
+<select id="findUserById" resultType="User">
+    SELECT * FROM users WHERE id = #{id}
+</select>
+2. 多个参数
+如果有多个参数，可以使用 @Param 注解指定参数名。
+
+Java Mapper 接口：
+
+java
+Copy code
+public interface UserMapper {
+    List<User> findUsers(@Param("username") String username, @Param("age") Integer age);
+}
+XML 配置：
+
+xml
+Copy code
+<select id="findUsers" resultType="User">
+    SELECT * FROM users
+    WHERE username = #{username} AND age = #{age}
+</select>
+3. 使用 Map
+当有很多参数或者参数是动态的时候，可以使用 Map 类型。
+
+Java Mapper 接口：
+
+java
+Copy code
+public interface UserMapper {
+    List<User> findUsersByMap(Map<String, Object> params);
+}
+XML 配置：
+
+xml
+Copy code
+<select id="findUsersByMap" resultType="User">
+    SELECT * FROM users
+    WHERE username = #{params.username} AND age = #{params.age}
+</select>
+4. 使用 POJO
+还可以直接使用一个 POJO 对象作为参数。
+
+Java Mapper 接口：
+
+java
+Copy code
+public interface UserMapper {
+    List<User> findUsersByUser(User user);
+}
+XML 配置：
+
+xml
+Copy code
+<select id="findUsersByUser" resultType="User">
+    SELECT * FROM users
+    WHERE username = #{username} AND age = #{age}
+</select>
+5. 使用 @Param 和 POJO 组合
+当需要传递单个值和 POJO 对象时，可以使用 @Param 和 POJO 的组合。
+
+Java Mapper 接口：
+
+java
+Copy code
+public interface UserMapper {
+    List<User> findUsersByParams(@Param("type") int type, User user);
+}
+XML 配置：
+
+xml
+Copy code
+<select id="findUsersByParams" resultType="User">
+    SELECT * FROM users
+    WHERE type = #{type} AND username = #{user.username} AND age = #{user.age}
+</select>
+以上几种方式根据不同的业务场景选择使用，使代码更加清晰、可维护。
+```
