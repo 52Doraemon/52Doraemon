@@ -575,7 +575,7 @@ XML 配置示例：
 </select>
 ~~~
 
-```
+
 在 MyBatis 中，可以通过多种方式向 Mapper 方法传递参数。
 
 1. 单一参数
@@ -590,29 +590,31 @@ public interface UserMapper {
 }
 XML 配置：
 
-xml
-Copy code
+~~~xml
 <select id="findUserById" resultType="User">
     SELECT * FROM users WHERE id = #{id}
 </select>
+~~~
 2. 多个参数
 如果有多个参数，可以使用 @Param 注解指定参数名。
 
 Java Mapper 接口：
 
-java
-Copy code
+~~~java
 public interface UserMapper {
     List<User> findUsers(@Param("username") String username, @Param("age") Integer age);
 }
+~~~
+
 XML 配置：
 
-xml
-Copy code
+~~~xml
 <select id="findUsers" resultType="User">
     SELECT * FROM users
     WHERE username = #{username} AND age = #{age}
 </select>
+~~~
+
 3. 使用 Map
 当有很多参数或者参数是动态的时候，可以使用 Map 类型。
 
@@ -625,47 +627,52 @@ public interface UserMapper {
 }
 XML 配置：
 
-xml
-Copy code
+~~~xml
 <select id="findUsersByMap" resultType="User">
     SELECT * FROM users
     WHERE username = #{params.username} AND age = #{params.age}
 </select>
+~~~
+
 4. 使用 POJO
 还可以直接使用一个 POJO 对象作为参数。
 
 Java Mapper 接口：
 
-java
-Copy code
+~~~java
 public interface UserMapper {
     List<User> findUsersByUser(User user);
 }
+~~~
+
 XML 配置：
 
-xml
-Copy code
+~~~xml
 <select id="findUsersByUser" resultType="User">
     SELECT * FROM users
     WHERE username = #{username} AND age = #{age}
 </select>
+~~~
+
 5. 使用 @Param 和 POJO 组合
 当需要传递单个值和 POJO 对象时，可以使用 @Param 和 POJO 的组合。
 
 Java Mapper 接口：
 
-java
-Copy code
+~~~java
 public interface UserMapper {
     List<User> findUsersByParams(@Param("type") int type, User user);
 }
+~~~
+
 XML 配置：
 
-xml
-Copy code
+~~~xml
 <select id="findUsersByParams" resultType="User">
     SELECT * FROM users
     WHERE type = #{type} AND username = #{user.username} AND age = #{user.age}
 </select>
+~~~
+
 以上几种方式根据不同的业务场景选择使用，使代码更加清晰、可维护。
-```
+
