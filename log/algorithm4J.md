@@ -319,3 +319,17 @@ KMP算法预处理模式串（子串）并构建一个“部分匹配表”（�
 队列求宽度（俗称层序遍历）
 
 3、搜索二叉树：对于每一颗子树来说，它的左数节点都比它小，右数节点都比它大。（一颗经典的搜索二叉树里面可以认为它是没有重复值的）
+
+java的stack.add和stack.push
+
+在Java中，Stack 类继承自 Vector 类，因此，Stack 对象不仅拥有栈（Stack）特有的方法，如 push 和 pop，还继承了 Vector 的方法，包括 add。
+
+**stack.push(E item)**
+
+push 方法用于将元素压入栈的顶部。它修改了栈的状态。push 方法遵循后入先出（LIFO, Last-In-First-Out）原则。
+
+**stack.add(E element)**
+
+add 方法用于将元素添加到向量（即 Stack）的尾部。它也会修改栈的状态，但这是因为它改变了 Vector，而 Stack 是 Vector 的一个子类。如果 Stack 作为栈使用，通常不推荐使用 add 方法，因为这样可能会导致代码的语义模糊。
+
+总结：虽然 add 和 push 在 Stack 类中都会将元素添加到集合的尾部，但 push 方法更符合栈的语义和操作原则。
