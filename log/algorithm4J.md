@@ -333,3 +333,16 @@ push 方法用于将元素压入栈的顶部。它修改了栈的状态。push �
 add 方法用于将元素添加到向量（即 Stack）的尾部。它也会修改栈的状态，但这是因为它改变了 Vector，而 Stack 是 Vector 的一个子类。如果 Stack 作为栈使用，通常不推荐使用 add 方法，因为这样可能会导致代码的语义模糊。
 
 总结：虽然 add 和 push 在 Stack 类中都会将元素添加到集合的尾部，但 push 方法更符合栈的语义和操作原则。
+
+
+java的linkedlist用作队列
+
+在Java中，LinkedList 类实现了 Queue 接口，因此你可以使用 LinkedList 的对象作为队列（Queue）来使用。
+
+poll(E e)：方法用于从队列中移除和返回头部（队首）元素。如果队列为空，这个方法将返回 null。
+
+push(E e)：在列表的前端添加元素。该方法使 LinkedList 也可以当作栈来使用，但如果把它作为队列使用，通常不会用到这个方法。
+
+add(E e)：在列表（因此也在队列）的末尾添加元素。当添加成功时，返回 true。如果队列受到容量限制并且当前已满，则抛出 IllegalStateException。
+
+offer(E e)：在队列的尾部插入一个元素。此方法与 add(E e) 类似，但当使用固定大小的队列（不适用于 LinkedList）并且队列已满时，offer 方法会返回 false，而 add 会抛出一个异常。
