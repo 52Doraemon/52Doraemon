@@ -507,3 +507,83 @@ StringUtils.isEmpty和!= null是两种用于检查字符串是否为空或为nul
 1、StringUtils.isEmpty：这是Apache Commons Lang库中的一个方法，用于检查字符串是否为空或null。它会检查字符串是否为null，以及字符串长度是否为零（即空字符串）。这意味着，如果字符串为null或为空字符串（长度为零），StringUtils.isEmpty将返回true。
     
 2、!= null：这是Java中的基本操作符，用于检查对象（如字符串）是否为null。它不会检查字符串的长度，只会检查字符串是否为null。因此，如果字符串为null，!= null将返回false。
+
+#### 31、Arrays.asList方式初始化列表
+
+Arrays.asList 是一个非常方便的用于初始化列表（List）的方法，它接受一个数组或者是一个可变数量的参数，并将其转换为一个固定大小的列表。
+
+~~~java
+// 得到了一个包含三个元素的列表
+List<String> list = Arrays.asList("a", "b", "c");
+~~~
+
+**需要注意的几点：**
+
+返回的列表是 java.util.Arrays 的一个私有静态内部类，它没有实现 add 或 remove 方法。如果你尝试添加或删除元素，将会得到 UnsupportedOperationException。
+
+返回的列表是对原始数组的一个“视图”，这意味着，如果你改变原始数组，那么列表的内容也会跟着变。
+
+因为它是一个固定大小的列表，所以你不能添加或删除元素，但是可以改变列表中现有元素的值。
+
+如果需要一个可修改的列表，可以创建一个新的 ArrayList：
+
+~~~java
+// 这样，modifiableList 就是一个可以自由添加或删除元素的列表了
+List<String> modifiableList = new ArrayList<>(Arrays.asList("a", "b", "c"));
+~~~
+
+#### 32、Arrays.asList的常见用法
+
+Arrays.asList 是一个非常方便的工具方法，用于初始化固定大小的列表或将数组转换为列表。
+
+基础用法
+
+1、初始化列表
+~~~java
+List<String> stringList = Arrays.asList("Apple", "Banana", "Cherry");
+~~~
+
+2、初始化数字列表
+~~~java
+List<Integer> integerList = Arrays.asList(1, 2, 3, 4, 5);
+~~~
+
+3、初始化多类型列表（不建议）
+~~~java
+List<Object> mixedList = Arrays.asList(1, "two", 3.0);
+~~~
+
+高级用法
+
+1、转换数组到列表
+~~~java
+// 请注意，这里返回的列表与原数组是“链接”的，修改其中之一会影响另一个。
+String[] stringArray = {"Apple", "Banana", "Cherry"};
+List<String> listFromArray = Arrays.asList(stringArray);
+~~~
+
+2、
+~~~java
+Set<String> stringSet = new HashSet<>(Arrays.asList("Apple", "Banana", "Cherry"));
+~~~
+
+3、用于初始化 Map 的键或值
+~~~java
+List<String> keys = Arrays.asList("Key1", "Key2");
+List<String> values = Arrays.asList("Value1", "Value2");
+Map<String, String> map = IntStream.range(0, keys.size())
+        .boxed()
+        .collect(Collectors.toMap(keys::get, values::get));
+~~~
+
+Arrays.asList使用注意事项：
+
+返回的列表是不可变的（大小固定，但元素可以更改）。
+
+不支持基本类型数组，例如 int[], double[] 等。你需要使用包装类型或者手动转换。
+
+返回的列表不是 java.util.ArrayList 的实例，而是 java.util.Arrays 的一个内部类。
+
+使用 Arrays.asList 可以使代码更简洁，但需要注意其限制和特性。
+
+#### 33、
