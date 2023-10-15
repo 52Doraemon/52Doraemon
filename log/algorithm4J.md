@@ -346,3 +346,21 @@ push(E e)：在列表的前端添加元素。该方法使 LinkedList 也可以�
 add(E e)：在列表（因此也在队列）的末尾添加元素。当添加成功时，返回 true。如果队列受到容量限制并且当前已满，则抛出 IllegalStateException。
 
 offer(E e)：在队列的尾部插入一个元素。此方法与 add(E e) 类似，但当使用固定大小的队列（不适用于 LinkedList）并且队列已满时，offer 方法会返回 false，而 add 会抛出一个异常。
+
+#### 5、HashMap 和 HashSet、LinkedHashMap 和 LinkedHashSet
+
+在 Java 中，HashMap 和 HashSet 的实现基本上是无序的，这意味着它们存储元素的顺序并不是元素被插入的顺序。如果你需要维护插入顺序，你可以使用 LinkedHashMap 和 LinkedHashSet，这两个类在内部使用链表来维护元素的插入顺序。
+
+**HashMap 和 HashSet**
+
+HashMap: 它不保证映射的顺序；特别是它不保证该顺序恒久不变。
+
+HashSet: 同样不保证 set 的迭代顺序；特别是它不保证该顺序恒久不变。
+
+**LinkedHashMap 和 LinkedHashSet**
+
+LinkedHashMap: 它维护了一个运行于所有条目的双重链接列表。此链接列表定义了迭代顺序，该迭代顺序可以是插入顺序或访问顺序。
+
+LinkedHashSet: 与 LinkedHashMap 类似，它也维护了一个运行于所有条目的双重链接列表，从而定义了元素的插入顺序。
+
+如果你需要按某种特定顺序（例如，排序顺序）来存储元素，你还可以使用如 TreeMap 或 TreeSet 的数据结构，它们实现了 SortedMap 和 SortedSet 接口，可以确保元素是按照某种特定顺序来排序的。
