@@ -111,3 +111,24 @@ spring:
 
 xxl-job需要mysql数据库存储任务配置信息，因此需要先把数据库和表数据初始化好，官网提供了脚步
 
+#### 5、feign和openfeign的区别和作用
+
+**OpenFeign介绍**
+
+```
+OpenFeign是一个Web声明式的Http客户端远程调用工具，底层是封装HttpClient技术，提供接口和注解形式调用。
+注意feign客户端调用的事项：
+a、如果请求参数没有加上注解的话，默认采用post请求发送。
+b、服务的名称命名不能够有下划线，只能使用中划线，否则会报下列的错。
+java.lang.IllegalStateException:Service id not legal hostname
+```
+
+**feign和openfeign的区别**
+
+```
+a、他们底层都是内置了Ribbon，去调用注册中心的服务。
+a、Feign是Netflix公司写的，是SpringCloud组件中的一个轻量级RESTful的HTTP服务客户端，是SpringCloud中的第一代负载均衡客户端。
+OpenFeign是SpringCloud自己研发的，在Feign的基础上支持了Spring MVC的注解，如@RequesMapping等等。是SpringCloud中的第二代负载均衡客户端。
+b、Feign本身不支持Spring MVC的注解，使用Feign的注解定义接口，调用这个接口，就可以调用服务注册中心的服务
+OpenFeign的@FeignClient可以解析SpringMVC的@RequestMapping注解下的接口，并通过动态代理的方式产生实现类，实现类中做负载均衡并调用其他服务。
+```
