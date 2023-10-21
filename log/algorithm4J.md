@@ -364,3 +364,6 @@ LinkedHashMap: 它维护了一个运行于所有条目的双重链接列表。�
 LinkedHashSet: 与 LinkedHashMap 类似，它也维护了一个运行于所有条目的双重链接列表，从而定义了元素的插入顺序。
 
 如果你需要按某种特定顺序（例如，排序顺序）来存储元素，你还可以使用如 TreeMap 或 TreeSet 的数据结构，它们实现了 SortedMap 和 SortedSet 接口，可以确保元素是按照某种特定顺序来排序的。
+
+
+
