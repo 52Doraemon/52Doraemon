@@ -476,3 +476,67 @@ WHERE customer_id IN (SELECT customer_id FROM orders WHERE product_name = 'YourP
 在这个示例中，子查询 (SELECT customer_id FROM orders WHERE product_name = 'YourProduct') 返回购买了特定产品的客户的 customer_id。然后，外部查询将使用这些 customer_id 来检索相应的客户名称，确保了子查询的结果与外部查询的条件相匹配。
 
 总之，在使用子查询时，确保子查询的 SELECT 语句选择的列与外部查询的 WHERE 子句中的条件相关，以便获得正确的查询结果。这有助于确保子查询和外部查询之间的匹配。
+
+-------------------------
+子查询可以应用在哪些地方？
+
+子查询（Subquery）是一个在 SQL 查询中嵌套的查询，它可以用于多个不同的地方以获取需要的数据或执行特定操作。子查询通常返回一个单一的值、一组值或一组记录，这些值可以在外部查询中使用。以下是一些常见的地方，可以应用子查询：
+
+1、WHERE 子句中：你可以在 WHERE 子句中使用子查询来过滤结果集，例如，查找满足特定条件的行。
+
+~~~sql
+SELECT name, age
+FROM employees
+WHERE department_id = (SELECT department_id FROM departments WHERE department_name = 'HR');
+~~~
+
+2、FROM 子句中：子查询可以用作表，用于从中获取数据，并与其他表联接。
+
+~~~sql
+SELECT employees.name, departments.department_name
+FROM employees
+INNER JOIN (SELECT department_id, department_name FROM departments) AS departments
+ON employees.department_id = departments.department_id;
+~~~
+
+3、SELECT 子句中：子查询可以用于选择数据并将其作为结果集中的一列。
+
+~~~sql
+SELECT name, (SELECT MAX(salary) FROM salaries WHERE employee_id = employees.id) AS max_salary
+FROM employees;
+~~~
+
+4、HAVING 子句中：你可以在 HAVING 子句中使用子查询来过滤分组后的结果。
+
+~~~sql
+SELECT department_id, AVG(salary)
+FROM employees
+GROUP BY department_id
+HAVING AVG(salary) > (SELECT AVG(salary) FROM employees);
+~~~
+
+5、INSERT 语句中：子查询可以用于插入数据，例如，将一张表的数据插入到另一张表中。
+
+~~~sql
+INSERT INTO new_table (column1, column2)
+SELECT columnA, columnB FROM old_table WHERE condition;
+~~~
+
+6、UPDATE 语句中：子查询可以用于更新表中的数据。
+
+~~~sql
+UPDATE employees
+SET salary = (SELECT MAX(salary) FROM salaries WHERE employee_id = employees.id)
+WHERE department_id = (SELECT department_id FROM departments WHERE department_name = 'IT');
+~~~
+
+7、DELETE 语句中：子查询可以用于删除满足特定条件的行。
+
+~~~sql
+DELETE FROM employees
+WHERE department_id = (SELECT department_id FROM departments WHERE department_name = 'Marketing');
+~~~
+
+子查询是强大的工具，可以帮助你在 SQL 查询中执行复杂的操作和筛选数据。你可以根据需要在不同的上下文中使用它们，以满足查询的需求。
+
+#### 14、
