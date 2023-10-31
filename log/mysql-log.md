@@ -458,3 +458,21 @@ MySQL中的数据用各种不同的技术存储在文件(或者内存)中。
 * 如何更新、查询数据 等技术的实现方法。
 
 例如，如果在研究大量的临时数据，也许需要使用内存存储引擎，因为内存存储引擎能够在内存中存储所有的表格数据。又或者，需要一个支持事务处理的数据库，以确保事务处理不成功时数据的回退能力，就要选择支持事务的存储引擎。
+
+#### 13、在mysql使用where中使用子查询时需要保证select语句和where语句有相匹配的列
+
+在 MySQL 中，当你使用子查询作为 WHERE 子句的一部分时，需要确保子查询的 SELECT 语句和外部查询的 WHERE 子句有相匹配的列，以便正确地检索所需的数据。这是因为子查询通常用于检索满足某些条件的行，而这些条件通常是基于外部查询中的列的值。
+
+具体来说，子查询中的 SELECT 语句应该选择与外部查询中的列相关的数据，并且这些数据需要用于外部查询的 WHERE 子句中的条件。这确保了子查询返回的数据与外部查询的条件相匹配。
+
+例如，假设你有两个表：orders 和 customers，你想查找所有购买某个产品的客户。你可以使用子查询来实现这个目标：
+
+~~~sql
+SELECT customer_name
+FROM customers
+WHERE customer_id IN (SELECT customer_id FROM orders WHERE product_name = 'YourProduct');
+~~~
+
+在这个示例中，子查询 (SELECT customer_id FROM orders WHERE product_name = 'YourProduct') 返回购买了特定产品的客户的 customer_id。然后，外部查询将使用这些 customer_id 来检索相应的客户名称，确保了子查询的结果与外部查询的条件相匹配。
+
+总之，在使用子查询时，确保子查询的 SELECT 语句选择的列与外部查询的 WHERE 子句中的条件相关，以便获得正确的查询结果。这有助于确保子查询和外部查询之间的匹配。
