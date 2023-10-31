@@ -539,4 +539,54 @@ WHERE department_id = (SELECT department_id FROM departments WHERE department_na
 
 子查询是强大的工具，可以帮助你在 SQL 查询中执行复杂的操作和筛选数据。你可以根据需要在不同的上下文中使用它们，以满足查询的需求。
 
-#### 14、
+#### 14、GROUP BY 的使用
+
+GROUP BY 是 SQL 中的一个非常重要的子句，它用于`将查询结果按照一个或多个列的值进行分组`。这允许你对每个分组应用聚合函数，如 SUM、AVG、COUNT 等，以便获得分组级别的数据汇总。以下是关于 GROUP BY 子句的基本用法和示例：
+
+基本语法：
+
+~~~sql
+SELECT column1, column2, aggregate_function(column3)
+FROM table_name
+GROUP BY column1, column2 DESC; --- 默认ASC
+~~~
+
+column1, column2 是你要选择的列。
+
+aggregate_function 是聚合函数，用于对每个分组执行计算。
+
+column3 是你要应用聚合函数的列。
+
+table_name 是你要从中检索数据的表。
+
+**示例 1：计算每个部门的平均工资（使用 AVG 聚合函数）：**
+
+~~~sql
+SELECT department, AVG(salary)
+FROM employees
+GROUP BY department;
+~~~
+
+> 在这个示例中，数据将按照部门分组，并对每个部门的工资应用平均值函数，从而获得每个部门的平均工资。
+
+**示例 2：计算每个部门的员工数量（使用 COUNT 聚合函数）：**
+
+~~~sql
+SELECT department, COUNT(*) as employee_count
+FROM employees
+GROUP BY department;
+~~~
+
+> 在这个示例中，数据将按照部门分组，并对每个部门的员工数量应用计数函数，从而获得每个部门的员工数量。
+
+**示例 3：计算每个部门的最高工资（使用 MAX 聚合函数）：**
+
+~~~sql
+SELECT department, MAX(salary) as max_salary
+FROM employees
+GROUP BY department;
+~~~
+
+> 在这个示例中，数据将按照部门分组，并对每个部门的工资应用最大值函数，从而获得每个部门的最高工资。
+
+> GROUP BY 子句是在执行聚合操作之前用来分组数据的重要工具。它允许你以更高层次的抽象方式查看和分析数据，以便更好地理解数据的分布和趋势。
