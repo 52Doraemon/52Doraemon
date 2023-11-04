@@ -132,3 +132,11 @@ OpenFeign是SpringCloud自己研发的，在Feign的基础上支持了Spring MVC
 b、Feign本身不支持Spring MVC的注解，使用Feign的注解定义接口，调用这个接口，就可以调用服务注册中心的服务
 OpenFeign的@FeignClient可以解析SpringMVC的@RequestMapping注解下的接口，并通过动态代理的方式产生实现类，实现类中做负载均衡并调用其他服务。
 ```
+
+#### 6、Http和RPC的区别
+
+RPC是一个远程过程调用协议，它解决的是让两个远程服务之间的调用就像本地调用一样，不需要去考虑远程通信的细节这样的问题。
+
+Http是一个应用层协议，它定义的是一个远程通信的协议规范。
+
+这两者的维度是不一样的。
